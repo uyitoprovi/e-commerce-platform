@@ -1,0 +1,48 @@
+{% extends 'myshop/base.html' %}
+{% load static %}
+{% block title %}
+{% if category %} {{ category.name }}{% else %} Products {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar">
+            <h3>Categories</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" {% if not category %} class="selected"{% endif %}>
+                    <a href="{% url 'myshop:product_list' %}">All</a>
+                </li>
+                {% for categ in categories %}
+                    <li {% if category.slug == categ.slug %} class="selected" {% endif %} class="list-group-item">
+                        <a href="{{ categ.get_absolute_url }}">{{ categ.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-md-9 main-content">
+            <h5 class="card-title">{% if category %} {{ category.name }} {% endif %}</h5>
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="card" style="width: 12rem;">
+                            <a href="{{ product.get_absolute_url }}">
+                                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/shoes1.jpg' %}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+                                <h5 class="card-title"><a href="{{ product.get_absolute_url }}">₹{{ product.price }}</a><!-- <p class="card-text">{{ product.description|truncatechars:100 }}</p> -->
+                                <!-- <a href="{{ product.get_absolute_url }}">Read more</a> -->
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

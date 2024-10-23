@@ -1,0 +1,38 @@
+{% extends "myshop/base.html" %}
+{% load static %}
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card product-detail-card">
+        <div class="row g-0">
+            <!-- Product Image -->
+            <div class="col-md-4">
+                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/tea.jpg' %}{% endif %}" class="img-fluid rounded-start product-image" alt="{{ product.name }}">
+            </div>
+            <!-- Product Details -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h1 class="card-title">{{ product.name }}</h1>
+                    <!-- <h2 class="card-subtitle mb-2 text-muted">
+                        <a href="{{ product.category.get_absolute_url }}" class="text-decoration-none">category: {{ product.category.name }}</a>
+                    </h2> -->
+                    <a href="{{ product.get_absolute_url }}" class="card-text price">₹{{ product.price }}</a>
+                    <p class="card-text description">{{ product.description }}</p>
+                    <div class="actions mt-3">
+                        <form action="{% url "cart:cart_add" product.id %}" method="post">
+                            {{ cart_product_form }}
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="submit" value="Add to cart" class="btn btn-primary" >
+                            <a href="#" class="btn btn-secondary">Wishlist</a>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

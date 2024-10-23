@@ -1,0 +1,34 @@
+{% extends 'myshop/base.html' %}
+{% load static %}
+{% block title %} Pay your order {% endblock title %}
+{% block content %}
+<h1>Order Summary</h1>
+<thead>
+    <table class="cart">
+    <tr>
+       <th>Image</th><th>product</th><th>Price</th><th>quantity</th><th>Total</th>
+    </tr>
+</thead>
+<tbody>
+    {% for item in order.items.all %}
+       <tr class="row{% cycle "1" "2" %}">
+        <td>
+            <img src="{% if item.product.image %}{{ item.product.image.url }} {% else %} {% static "img/no_image.png" %} {% endif %}">
+        </td>
+        <td> {{ item.prooduct.name }}</td>
+        <td class="num">${{ item.price }}</td>
+        <td class="num">{{ item.quantity }}</td>
+        <td class="num">${{ itme.get_cost }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="total">
+        <td colspan="4">Total</td>
+        <td class="num">${{ order.get_total_cost}}</td>
+    </tr>
+</tbody>
+</table>
+<form action="{% url "payment:process" %}" method="Post">
+    <input type="submit" value="Pay now">
+    {% csrf_token %}
+</form>
+{% endblock %}
